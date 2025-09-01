@@ -1,0 +1,21 @@
+/* common.css */
+.cre-list {
+    width: fit-content;
+    margin: auto;
+}
+
+.cre-detail {
+    width: 768px;
+    margin: auto;
+    text-align: left;
+}
+
+.cre-contents {
+    padding: 12px 8px;
+    border-bottom: 1px solid #eee;
+}
+
+.common-buttons {
+    padding: 8px;
+    text-align: right;
+}

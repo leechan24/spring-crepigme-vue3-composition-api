@@ -1,7 +1,3 @@
-
-oracle 19c  jdk8 
-
-
 -- 버전들 
 node -v v16.20.2
 npm -v  8.19.4
@@ -15,6 +11,7 @@ lombok 설치 완료
 -- port 
  8082
  5173   : vlite는 기본이 5173 
+
 - 프로젝트 위치 
 C:\Users\chan\Documents\workspace-spring-tools-for-eclipse-4.31.0.RELEASE\minfo
 
@@ -25,7 +22,7 @@ SQL> grant connect, resource, dba to C##chan;
 
 
 -- vite로 프로젝트 생성  ( vue cli 기반으로 안함) 
-1. cd "C:\Users\chan\Documents\workspace-spring-tools-for-eclipse-4.31.0.RELEASE"
+1. cd "C:\Users\chan\Documents\workspace-spring-tools-for-eclipse-4.31.0.RELEASE\minfo"
 2. npm create vue@latest frontend
   cd frontend
   npm install
@@ -39,8 +36,9 @@ SQL> grant connect, resource, dba to C##chan;
 	VITE_BASE_URL=/
 
 
-
--- npm install 목록들 
+-- 현재 build.gradle과 같은 위치에 frontend  집어넣었고  node_modules는 용량이 커서 보통 git에 올리지않음 
+   --> 옮기는 과정에서 사라지기도 하므로 안올리고 npm install을 다시 하는게 맞음
+-- npm install 한 목록들 
 
 npm install axios
 npm install -D @types/axios
@@ -49,3 +47,26 @@ npm install --save @fortawesome/fontawesome-free
 npm install js-cookie
 
 
+-- front 실행 
+npm run dev
+
+-- *** 배포과정 *** 
+1. 프론트 빌드 
+  cd frontend
+  npm run build
+   -> vite.config.js에서 build.outDir: '../src/main/resources/static'으로 설정했기 때문에 
+      빌드 결과물이 minfo/src/main/resources/static/ 안에 들어갑니다.
+2. 백엔드 빌드 (프론트 포함된 상태)
+  ./gradlew clean build
+  build/libs/minfo-0.0.1-SNAPSHOT.jar 같은 실행 가능한 JAR이 생성됨
+  이 안에는 Spring Boot 코드 + Vue 정적 파일(dist) 이 전부 들어 있습니다.
+3. 서버에서 실행 
+java -jar build/libs/minfo-0.0.1-SNAPSHOT.jar
+기본적으로 http://localhost:8082 (혹은 설정한 포트)에서 서비스 시작
+Vue 빌드 결과물이 / 경로에서 자동 제공됨
+API는 /api/** 같은 경로로 Spring Boot가 처리
+즉, Vue 앱과 Spring Boot API 서버가 한 몸이 된 JAR 하나로 배포됩니다.
+ 
+-- 404 에러 
+Vue Router history 모드 쓰면 Spring Boot에서 fallback 설정 필요
+Spring Boot가 없는 경로에 대해서도 index.html을 반환하게 해야 새로고침 시 404 안 뜸

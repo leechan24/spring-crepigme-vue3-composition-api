@@ -1,0 +1,21 @@
+import axios from 'axios';
+
+// 크레 리스트 조회 (GET)
+export const CRE_LIST = async () => {
+    return await axios.get('/api/cre/list');
+}
+
+// 크레 생성 (POST)
+export const CREATE_CRE = async (cre) => {
+    return await axios.post('/api/cre/create', cre);
+}
+
+// 크레 삭제 (DELETE)
+export const DELETE_CRE = async (creId) => {
+    return await axios.delete(`/api/cre/delete/${creId}`);
+}
+
+// 크레 수정 (PUT)
+export const UPDATE_CRE = async (cre) => {
+    return await axios.put('/api/cre/update', cre);
+}
