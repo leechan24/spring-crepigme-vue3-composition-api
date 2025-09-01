@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.maple.info.mapper.UserMapper">
+
+    <select id="findByUserName" parameterType="string" resultType="com.maple.info.vo.UserVo">
+        SELECT 
+            ID, USERNAME as userName, PW as pw, ROLE, CREATED_DT as createdDt, UPDATED_DT as updatedDt
+        FROM USERS
+        WHERE USERNAME = #{userName}
+    </select>
+
+    <insert id="insertUser" parameterType="com.maple.info.vo.UserVo">
+        INSERT INTO USERS (ID, USERNAME, PW, ROLE, CREATED_DT, UPDATED_DT)
+        VALUES (#{id}, #{userName}, #{pw}, #{role}, #{createdDt}, #{updatedDt})
+    </insert>
+
+</mapper>

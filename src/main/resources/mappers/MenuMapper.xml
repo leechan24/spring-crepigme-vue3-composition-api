@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.maple.info.mapper.MenuMapper">
+
+    <!-- 모든 메뉴 조회 (2레벨) -->
+    <select id="selectAllMenu" resultType="com.maple.info.vo.MenuVo">
+        SELECT ID, PARENT_ID, NAME, PATH, SORT_ORDER, LV, CREATED_AT, UPDATED_AT
+        FROM MENU
+        ORDER BY LV, SORT_ORDER
+    </select>
+
+    <!-- 특정 메뉴 조회 -->
+    <select id="selectMenuById" resultType="com.maple.info.vo.MenuVo">
+        SELECT ID, PARENT_ID, NAME, PATH, SORT_ORDER, LV, CREATED_AT, UPDATED_AT
+        FROM MENU
+        WHERE ID = #{id}
+    </select>
+
+    <!-- 메뉴 삽입 -->
+    <insert id="insertMenu">
+        INSERT INTO MENU(ID, PARENT_ID, NAME, PATH, SORT_ORDER, LV, CREATED_AT)
+        VALUES (#{id}, #{parentId}, #{name}, #{path}, #{sortOrder}, #{lv}, SYSDATE)
+    </insert>
+
+    <!-- 메뉴 수정 -->
+    <update id="updateMenu">
+        UPDATE MENU
+        SET NAME=#{name}, PATH=#{path}, SORT_ORDER=#{sortOrder}, LV=#{lv}, UPDATED_AT=SYSDATE
+        WHERE ID=#{id}
+    </update>
+
+    <!-- 메뉴 삭제 -->
+    <delete id="deleteMenu">
+        DELETE FROM MENU WHERE ID=#{id}
+    </delete>
+
+</mapper>

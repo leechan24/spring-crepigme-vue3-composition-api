@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.maple.info.mapper.CreMapper">
+
+    <!-- Cre 전체 조회 -->
+    <select id="selectCreList" resultType="com.maple.info.vo.CreVo">
+        SELECT idx, name, morph, birthday, price, mother, father, etc, sex, home_yn AS homeYn, color, sale_price AS salePrice, img_path AS imgPath
+        FROM CRE
+    </select>
+
+    <!-- Cre 단일 조회 -->
+    <select id="selectCre" parameterType="string" resultType="com.maple.info.vo.CreVo">
+        SELECT idx, name, morph, birthday, price, mother, father, etc, sex, home_yn AS homeYn, color, sale_price AS salePrice, img_path AS imgPath
+        FROM CRE
+        WHERE idx = #{idx}
+    </select>
+
+    <!-- Cre 등록 -->
+    <insert id="insertCre" parameterType="com.maple.info.vo.CreVo" useGeneratedKeys="true" keyProperty="idx">
+        INSERT INTO CRE (idx, name, morph, birthday, price, mother, father, etc, sex, home_yn, color, sale_price)
+        VALUES ('CRE' || TO_CHAR(CRE_SEQ.NEXTVAL, 'FM0000'), #{name}, #{morph}, #{birthday}, #{price}, #{mother}, #{father}, #{etc}, #{sex}, #{homeYn}, #{color}, #{salePrice})
+    </insert>
+
+    <!-- Cre 수정 -->
+    <update id="updateCre" parameterType="com.maple.info.vo.CreVo">
+        UPDATE CRE
+        SET name = #{name},
+            morph = #{morph},
+            birthday = #{birthday},
+            price = #{price},
+            mother = #{mother},
+            father = #{father},
+            etc = #{etc},
+            sex = #{sex},
+            home_yn = #{homeYn},
+            color = #{color},
+            sale_price = #{salePrice}
+        WHERE idx = #{idx}
+    </update>
+
+    <!-- Cre 삭제 -->
+    <delete id="deleteCre" parameterType="string">
+        DELETE FROM CRE WHERE idx = #{idx}
+    </delete>
+
+    <!-- Mouse 전체 조회 -->
+    <select id="selectMouseList" resultType="com.maple.info.vo.MouseVo">
+        SELECT idx, name, morph, birthday, price, sex, home_yn AS homeYn
+        FROM MOUSE
+    </select>
+
+</mapper>
