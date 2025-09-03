@@ -47,7 +47,7 @@ const store = useStore();
 const route = useRoute();
 
 // Vuex에서 CRE dialogHTML 가져오기
-const dialogHTML = computed(() => store.getters['cre/GET_DIALOG_HTML']);
+const dialogHTML = computed(() => store.getters['notice/GET_DIALOG_HTML']);
 
 // 실제 화면에 보여줄 공지사항 (쿠키 체크 후)
 const visibleNotices = ref([]);
@@ -60,7 +60,7 @@ const closeNotice = (idx) => {
 // 오늘 하루 보지않기 버튼 
 const closeToday = (itemIdx, idx) => {
   // 쿠키에 하루 동안 저장 (1일 만료)
-  Cookies.set(`cre-${itemIdx}`, "hidden", { expires: 1 });
+  Cookies.set(`notice-${itemIdx}`, "hidden", { expires: 1 });
   // 화면에서도 제거
   closeNotice(idx);
 };
@@ -70,7 +70,7 @@ const loadNotices = () => {
   dialogHTML.value.forEach(item => {
     // 쿠키 체크 + 이미 visibleNotices에 없으면 추가
     const exists = visibleNotices.value.some(v => v.idx === item.idx);
-    if (!Cookies.get(`cre-${item.idx}`) && !exists) {
+    if (!Cookies.get(`notice-${item.idx}`) && !exists) {
       visibleNotices.value.push({ ...item }); // 얕은 복사로 참조 끊기
     }
   });
@@ -78,12 +78,14 @@ const loadNotices = () => {
 
 onMounted(async () => {
   // CRE 리스트가 없으면 조회
-  if (!store.getters['cre/GET_CRELIST']?.length) {
+ /*  if (!store.getters['cre/GET_CRELIST']?.length) {
     await store.dispatch('cre/FETCH_CRELIST')  // 현재 여기가 공지사항이 되어야하는데 크레로 임시로해서 2번 호출함 list.vue에서도 불러서 
-  }
+  } */
+
 
   // 첫 페이지(/)이면 공지사항 로드
   if (route.path === '/') {
+    await store.dispatch('notice/FETCH_NOTICES'); // 공지사항 불러오기
     loadNotices();
   }
 });

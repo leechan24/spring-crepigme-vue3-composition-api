@@ -1,19 +1,22 @@
 package com.maple.info.vo;
 
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
 
 import lombok.Data;
 
 @Data // lombok으로 getter/setter 자동 생성 
 public class UserVo {
 
-    private String id;
-    private String userName;
-    private String pw;
+	private String userId;       // USER_ID
+    private String username;     
+    private String passwordHash; // PASSWORD_HASH
+    private String email;
+    private String status;
     private String refreshToken; // Refresh Token 저장용
     private String role;
-    private LocalDateTime createdDt;
-    private LocalDateTime updatedDt;
+    private Timestamp createdAt;
+    private Timestamp updatedAt;
     
+    private String accessToken; // Refresh Token 저장용
 
 }

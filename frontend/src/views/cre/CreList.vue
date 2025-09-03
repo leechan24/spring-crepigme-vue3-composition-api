@@ -52,7 +52,7 @@ const fnWrite = () => router.push({ path: './write' });
 
 // 리스트 조회
 const creList = async () => {
-  if (store.getters['cre/GET_CRELIST']?.length) return;
+  //if (store.getters['cre/GET_CRELIST']?.length) return;
   try {
     await store.dispatch('cre/FETCH_CRELIST', requestBody);
   } catch (err) {

@@ -26,8 +26,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void createUser(UserVo user) {
-        user.setPw(passwordEncoder.encode(user.getPw()));
-        user.setCreatedDt(LocalDateTime.now());
+        user.setPasswordHash(passwordEncoder.encode(user.getPasswordHash()));
         userMapper.insertUser(user);
     }
 
@@ -35,10 +34,10 @@ public class UserServiceImpl implements UserService {
     public void updateRefreshToken(UserVo user) {
         userMapper.updateRefreshToken(user);
     }
-
+    
     @Override
     public UserVo findByRefreshToken(String refreshToken) {
-        return userMapper.getUserByRefreshToken(refreshToken);
+        return userMapper.findByRefreshToken(refreshToken);
     }
 
     @Override

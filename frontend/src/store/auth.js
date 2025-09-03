@@ -1,8 +1,8 @@
-import axios from '@/plugins/axios';
+import api from "@/api/axios";
+import router from "@/router";
 
 const state = () => ({
-  accessToken: localStorage.getItem('accessToken') || null,
-  refreshToken: localStorage.getItem('refreshToken') || null,
+  accessToken: localStorage.getItem("accessToken") || null,
   user: null,
 });
 
@@ -13,45 +13,67 @@ const getters = {
 };
 
 const mutations = {
-  SET_TOKENS(state, { accessToken, refreshToken }) {
-    state.accessToken = accessToken;
-    state.refreshToken = refreshToken;
-    localStorage.setItem('accessToken', accessToken);
-    localStorage.setItem('refreshToken', refreshToken);
+  SET_ACCESS_TOKEN(state, token) {
+    state.accessToken = token;
+    localStorage.setItem("accessToken", token);
   },
-  CLEAR_TOKENS(state) {
+  CLEAR_ACCESS_TOKEN(state) {
     state.accessToken = null;
-    state.refreshToken = null;
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
+    localStorage.removeItem("accessToken");
   },
   SET_USER(state, user) {
     state.user = user;
+  },
+  CLEAR_USER(state) {
+    state.user = null;
   },
 };
 
 const actions = {
   async login({ commit }, { id, password }) {
-    const res = await axios.post('/auth/login', { id, password });
-    const { accessToken, refreshToken, user } = res.data;
-    commit('SET_TOKENS', { accessToken, refreshToken });
-    commit('SET_USER', user);
-  },
-
-  async logout({ commit }) {
-    commit('CLEAR_TOKENS');
-    commit('SET_USER', null);
-  },
-
-  async refreshToken({ state, commit }) {
     try {
-      const res = await axios.post('/auth/refresh', { refreshToken: state.refreshToken });
+      const res = await api.post("/auth/login", { id, password });
+      const { accessToken, user } = res.data;
+      commit("SET_ACCESS_TOKEN", accessToken);
+      commit("SET_USER", user);
+      console.log("로그인 완료:", user);
+    } catch (err) {
+      commit("CLEAR_ACCESS_TOKEN");
+      commit("CLEAR_USER");
+      commit("cre/CLEAR_CRE_LIST", null, { root: true }); // cre 모듈의 리스트 초기화 이건 임시 조치 다른 모듈도 필요
+      throw err;
+    }
+  },
+
+  async logout({ commit, getters }) {
+    try {
+      const user = getters.getUser;
+      const userId = user?.userId;
+
+      if (userId) {
+        await api.post("/auth/logout", null, {
+          params: { userId },
+        });
+      }
+    } catch (err) {
+      console.error("로그아웃 실패", err);
+    } finally {
+      commit("CLEAR_ACCESS_TOKEN");
+      commit("CLEAR_USER");
+      router.push({ name: "Login" });
+    }
+  },
+
+  // refresh 액션도 그대로 두지만, axios 인터셉터에서 호출되므로 직접 호출은 거의 없음
+  async refresh({ commit }) {
+    try {
+      const res = await api.post("/auth/refresh");
       const { accessToken } = res.data;
-      commit('SET_TOKENS', { accessToken, refreshToken: state.refreshToken });
+      commit("SET_ACCESS_TOKEN", accessToken);
       return accessToken;
     } catch (err) {
-      commit('CLEAR_TOKENS');
-      commit('SET_USER', null);
+      commit("CLEAR_ACCESS_TOKEN");
+      commit("CLEAR_USER");
       throw err;
     }
   },

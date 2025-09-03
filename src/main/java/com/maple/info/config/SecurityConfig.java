@@ -25,13 +25,13 @@ public class SecurityConfig {
         http
             .csrf().disable()
             .authorizeRequests()
-            .antMatchers("/api/**").permitAll() // 메뉴도 허용
+            .antMatchers("/api/menu/list", "/api/notice/gitlab", "/api/auth/**").permitAll() // 메뉴도 허용
           //  .antMatchers("/auth/**", "/menu/**", "/cre/**").permitAll() // 메뉴도 허용
          //       .antMatchers("/auth/**").permitAll()
                 .anyRequest().authenticated()
-            .and();
-            //.addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), 
-            //                 org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class);
+            .and()
+            .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), 
+                             org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 }

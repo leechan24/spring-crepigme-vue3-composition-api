@@ -67,6 +67,19 @@ Vue 빌드 결과물이 / 경로에서 자동 제공됨
 API는 /api/** 같은 경로로 Spring Boot가 처리
 즉, Vue 앱과 Spring Boot API 서버가 한 몸이 된 JAR 하나로 배포됩니다.
  
+-- 깃랩 공지사항 연동시 주의점 
+java 8 버전을 사용해선지는 모르겠지만  RestTemplate로 GitLab API에 요청했는데, URL에 /가 포함된 파일 경로를 정확히 인코딩하는 과정에서 계속 꼬임 
+-> HttpClient로 바꿔서 URL에 /가 들어간 경로를 정확히 %2F로 인코딩하고, private_token도 URL 파라미터로 붙여서 요청하면 GitLab이 바로 파일을 반환해줌
+
+-- 깃랩 관련 
+1. 깃랩 api - 깃랩에서 저장소에 있는 파일 내용 그대로 가져오는 api 
+GET /projects/:id/repository/files/:file_path/raw?ref=:branch
+:id → 프로젝트 숫자 ID (예: 74071629)
+:file_path → 파일 경로, URL 인코딩 필요 (notices/2025-09-01_test1_2025-09-07.md → notices%2F2025-09-01_test1_2025-09-07.md)
+ref → 브랜치 이름 (예: main)
+-> cmd 에서 curl --header "PRIVATE-TOKEN: glpat-NiKXmqc9zb2s42o1cO4Ai286MQp1OmNxeXR2Cw.01.121pukiz8" "https://gitlab.com/api/v4/projects/74071629/repository/files/notices%2F2025-09-01_test1_2025-09-07.md/raw?ref=main"
+이렇게 작성하면 프로젝트 숫자id및 파일경로 나옴 
+
 -- 404 에러 
 Vue Router history 모드 쓰면 Spring Boot에서 fallback 설정 필요
 Spring Boot가 없는 경로에 대해서도 index.html을 반환하게 해야 새로고침 시 404 안 뜸

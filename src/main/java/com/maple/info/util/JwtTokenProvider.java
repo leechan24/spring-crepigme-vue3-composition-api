@@ -15,12 +15,14 @@ public class JwtTokenProvider {
     @Value("${jwt.secret}")
     private String secretKey;
 
-    @Value("${jwt.expiration}")
-    private long expiration; // 밀리초
-
+    //@Value("${jwt.expiration}")
+    //private long expiration; // 밀리초
+    //private long accessTokenValidityInMilliseconds = 1000L * 60 * 1; // test용 1분
+    private long accessTokenValidityInMilliseconds = 1000L * 60 * 5; // 5분
+    
     public String generateAccessToken(String userId) {
         Date now = new Date();
-        Date exp = new Date(now.getTime() + expiration);
+        Date exp = new Date(now.getTime() + accessTokenValidityInMilliseconds);
 
         return Jwts.builder()
                 .setSubject(userId)

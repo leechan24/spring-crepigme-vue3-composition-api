@@ -9,6 +9,6 @@ public interface UserMapper {
 	UserVo findById(String id);
     void insertUser(UserVo user);
     void updateRefreshToken(UserVo user);
-    UserVo getUserByRefreshToken(String refreshToken);
+    UserVo findByRefreshToken(String refreshToken);
     List<UserVo> getAllUsers();
 }
