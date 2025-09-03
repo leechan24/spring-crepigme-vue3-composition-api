@@ -83,3 +83,9 @@ ref → 브랜치 이름 (예: main)
 -- 404 에러 
 Vue Router history 모드 쓰면 Spring Boot에서 fallback 설정 필요
 Spring Boot가 없는 경로에 대해서도 index.html을 반환하게 해야 새로고침 시 404 안 뜸
+
+
+-- 로그인 관련 
+accesstoken + refresh 갱신 각 5분, 7일로 지정해둠
+ access는 JwtTokenProvider 에서 설정 
+ refresh는  AuthController에서 설정 
