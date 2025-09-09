@@ -11,6 +11,7 @@
                PASSWORD_HASH as passwordHash,
                EMAIL as email,
                STATUS as status,
+               PHONE_NUMBER as phoneNumber,
                CREATED_AT as createdAt,
                UPDATED_AT as updatedAt,
                REFRESH_TOKEN as refreshToken
@@ -46,11 +47,10 @@
         FROM USERS
         WHERE REFRESH_TOKEN = #{refreshToken}
     </select>
+    
     <insert id="insertUser" parameterType="com.maple.info.vo.UserVo">
-        INSERT INTO USERS (ID, USERNAME, PW, ROLE, CREATED_DT, UPDATED_DT)
-        VALUES (#{id}, #{userName}, #{pw}, #{role}, #{createdDt}, #{updatedDt})
+      INSERT INTO USERS (USER_ID, USERNAME, PASSWORD_HASH, EMAIL, STATUS, PHONE_NUMBER)
+    	VALUES  (#{userId}, #{username}, #{passwordHash}, #{email}, #{status}, #{phoneNumber})
     </insert>
-    
-    
 
 </mapper>

@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +26,15 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public Map<String, Object> login(String userId, String password) {
+    	
+		/* 임시 1234 비밀번호를 인코딩한 결과 보기 
+		 * BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(); String
+		 * rawPassword = "1234"; String encodedPassword = encoder.encode(rawPassword);
+		 * 
+		 * System.out.println("Encoded password: " + encodedPassword);
+		 */
+        
+        
         UserVo user = userMapper.findById(userId);
         if (user == null) {
             throw new RuntimeException("존재하지 않는 사용자입니다.");

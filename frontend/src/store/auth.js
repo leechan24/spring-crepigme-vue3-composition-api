@@ -3,7 +3,7 @@ import router from "@/router";
 
 const state = () => ({
   accessToken: localStorage.getItem("accessToken") || null,
-  user: null,
+  user: JSON.parse(localStorage.getItem('user')) || null,
 });
 
 const getters = {
@@ -36,7 +36,11 @@ const actions = {
       const { accessToken, user } = res.data;
       commit("SET_ACCESS_TOKEN", accessToken);
       commit("SET_USER", user);
-      console.log("로그인 완료:", user);
+      
+      // 브라우저 스토리지 저장
+      localStorage.setItem('user', JSON.stringify(user));
+      localStorage.setItem('token', accessToken);
+    
     } catch (err) {
       commit("CLEAR_ACCESS_TOKEN");
       commit("CLEAR_USER");
@@ -60,6 +64,9 @@ const actions = {
     } finally {
       commit("CLEAR_ACCESS_TOKEN");
       commit("CLEAR_USER");
+
+      localStorage.removeItem('user');
+      localStorage.removeItem('accessToken');
       router.push({ name: "Login" });
     }
   },

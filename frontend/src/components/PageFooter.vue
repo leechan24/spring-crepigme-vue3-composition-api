@@ -46,7 +46,8 @@ export default {};
 
 <style scoped>
 .footer {
-  background-color: #f8f8f8;
+  /* background-color: #f8f8f8; */
+  /* background-color: #343a40!important; */
   padding: 2px 2px; /* 위아래 2px로 줄임 */
   color: #333;
   font-family: "Noto Sans KR", sans-serif;
@@ -69,7 +70,7 @@ export default {};
   display: flex;
   justify-content: space-around;
   flex-wrap: wrap;
-  margin-bottom: 30px;
+  /* margin-bottom: 30px; */
 }
 .link-section h4 {
   font-size: 16px;

@@ -14,6 +14,7 @@ public class UserVo {
     private String status;
     private String refreshToken; // Refresh Token 저장용
     private String role;
+    private String phoneNumber;
     private Timestamp createdAt;
     private Timestamp updatedAt;
     

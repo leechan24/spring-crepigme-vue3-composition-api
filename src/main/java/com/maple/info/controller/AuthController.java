@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.maple.info.service.AuthService;
+import com.maple.info.service.UserService;
+import com.maple.info.vo.UserVo;
 
 import lombok.RequiredArgsConstructor;
 
@@ -22,7 +24,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AuthController {
 
-    private final AuthService authService;
+    private final AuthService authService; 
+    private final UserService userService;
+
 
     @PostMapping("/login")
     public ResponseEntity<Map<String, Object>> login(@RequestBody Map<String, String> payload) {
@@ -82,4 +86,46 @@ public class AuthController {
 
         return ResponseEntity.ok(body);
     }
+    
+    // 회원가입 관련 
+    @PostMapping("/signup")
+    public ResponseEntity<String> signup(@RequestBody UserVo userVO) {
+        userService.registerUser(userVO);
+        return ResponseEntity.ok("회원가입 성공");
+    }
+
+ // 인증번호 발송
+    @PostMapping("/send-code")
+    public ResponseEntity<String> sendCode(@RequestBody UserVo vo) {
+        userService.sendVerificationCode(vo.getPhoneNumber());
+        return ResponseEntity.ok("인증번호 발송 완료");
+    }
+
+    // 인증번호 검증
+    @PostMapping("/verify-code")
+    public ResponseEntity<Boolean> verifyCode(@RequestParam String phoneNumber,
+                                             @RequestParam String code) {
+        boolean result = userService.verifyCode(phoneNumber, code);
+        if(result) {
+            return ResponseEntity.ok(true);
+        } else {
+            return ResponseEntity.badRequest().body(false);
+        }
+    }
+    
+	/*
+	 * @PostMapping("/send-code") public ResponseEntity<String>
+	 * sendCode(@RequestBody Map<String, String> req) { String phone =
+	 * req.get("phoneNumber"); userService.sendVerificationCode(phone); return
+	 * ResponseEntity.ok("인증번호 발송 성공"); }
+	 * 
+	 * @PostMapping("/verify-code") public ResponseEntity<Map<String, Object>>
+	 * verifyCode(@RequestBody Map<String, String> req) { boolean verified =
+	 * userService.verifyCode(req.get("phoneNumber"), req.get("code"));
+	 * 
+	 * Map<String, Object> result = new HashMap<>(); result.put("verified",
+	 * verified);
+	 * 
+	 * return ResponseEntity.ok(result); }
+	 */
 }
