@@ -14,15 +14,18 @@
         <option value="F">암컷</option>
       </select>
 
-      <!-- 🔹 정렬조건 (오른쪽 끝으로) -->
+      <!--  정렬조건 (오른쪽 끝으로) -->
       <div class="sort-wrapper">
-        <label for="sortKey">정렬:</label>
+       <!--  <label for="sortKey">정렬:</label>
         <select v-model="sortKey" id="sortKey">
           <option value="">기본</option>
           <option value="morph">모프</option>
           <option value="sex">성별</option>
           <option value="birthday">생일</option>
-        </select>
+        </select> -->
+
+        <!-- 추가 버튼 -->
+        <button class="add-btn" @click="showModal = true">개체 등록</button>
       </div>
     </div>
 
@@ -30,13 +33,15 @@
     <div class="card-grid">
       <Card v-for="(item, idx) in list" :key="idx" :item="item" />
 
-      <!-- 🔹 부족한 칸 placeholder -->
+      <!--  부족한 칸 placeholder -->
       <div
         v-for="n in (size - list.length)"
         :key="'ph-' + n"
         class="card placeholder"
       ></div>
     </div>
+    <!-- CreRegisterModal 호출 -->
+    <CreRegisterModal :show="showModal" @close="showModal = false" />
 
     <!-- 페이징 버튼 -->
     <div class="pagination">
@@ -59,10 +64,13 @@ import { ref, computed } from 'vue';
 import { useStore } from 'vuex';
 import { useRoute, useRouter } from 'vue-router';
 import Card from '@/views/cre/CreCard.vue';
+import CreRegisterModal from '@/views/cre/CreRegisterModal.vue';
 
 const route = useRoute();
 const router = useRouter();
 const store = useStore();
+
+const showModal = ref(false);
 
 const requestBody = ref({});
 
@@ -155,6 +163,8 @@ const creList = async () => {
 };
 
 creList();
+
+
 </script>
 
 <style scoped>
@@ -178,7 +188,7 @@ creList();
   margin-left: auto;
   display: flex;
   align-items: center;
-  gap: 0.25rem;
+  gap: 0.5rem;
 }
 
 .card-grid {
@@ -243,5 +253,24 @@ creList();
 .pagination button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+/* 추가 버튼 */
+.add-btn {
+  padding: 0.6rem 1rem;            /* 클릭 영역 넓힘 */
+  background: #66bb6a;             /* 밝은 그린 */
+  color: #fff;
+  border: none;
+  border-radius: 0.35rem;          /* 살짝 둥글게 */
+  cursor: pointer;
+  font-weight: 700;                /* 조금 더 굵게 */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 그림자 추가 */
+  transition: all 0.2s ease-in-out;
+}
+
+.add-btn:hover {
+  background: #57a05a;             /* hover 시 색상 변화 */
+  transform: scale(1.05);          /* 살짝 커지며 강조 */
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15); /* 그림자 강화 */
 }
 </style>

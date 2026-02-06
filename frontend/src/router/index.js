@@ -4,7 +4,7 @@ import CreList from '@/views/cre/CreList.vue'
 import SleepMouseList from '@/views/sleepMouse/SleepMouse.vue'
 import CreDetail from '@/views/cre/CreDetail.vue'
 import Login from '@/views/Login.vue'
-
+import store from '@/store'   
 
 
 const routes = [
@@ -21,6 +21,7 @@ const routes = [
   {
     path: '/cre/list',
     name: 'CreList',
+    meta: { requiresAuth: true },
     component: CreList
   },
   {
@@ -61,12 +62,13 @@ const router = createRouter({
   routes
 });
 
-// router.beforeEach((to, from, next) => {
-//   if (to.meta.requiresAuth && !store.getters['auth/isLoggedIn']) {
-//     next('/login');
-//   } else {
-//     next();
-//   }
-// });
+ router.beforeEach((to, from, next) => {
+   if (to.meta.requiresAuth && !store.getters['auth/isLoggedIn']) {
+     alert("로그인 후 이용 가능합니다.");
+     next('/login');
+   } else {
+     next();
+   }
+ });
 
 export default router
