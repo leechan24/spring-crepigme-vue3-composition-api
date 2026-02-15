@@ -19,3 +19,27 @@
     padding: 8px;
     text-align: right;
 }
+
+/* Page & Grid Layout */
+.page-container {
+    padding: 20px;
+    margin: 0 auto;
+}
+
+.grid-container {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e0e0e0;
+}
+
+.grid-toolbar {
+    margin-bottom: 15px;
+}
+
+/* Grid Customization */
+.dx-datagrid {
+    border-radius: 8px;
+    overflow: hidden;
+}

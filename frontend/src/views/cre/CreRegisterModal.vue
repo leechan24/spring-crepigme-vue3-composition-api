@@ -79,8 +79,10 @@
         </div>
 
         <div class="modal-actions">
-          <button type="submit" class="add-btn">저장</button>
-          <button type="button" class="cancel-btn" @click="$emit('close')">취소</button>
+          <button type="submit" class="add-btn" :disabled="isSubmitting">
+            {{ isSubmitting ? '저장 중...' : '저장' }}
+          </button>
+          <button type="button" class="cancel-btn" @click="$emit('close')" :disabled="isSubmitting">취소</button>
         </div>
       </form>
     </div>
@@ -89,9 +91,10 @@
 
 <script setup>
 import { ref } from 'vue';
+import { CREATE_CRE } from '@/api/cre';
 
 const props = defineProps({ show: Boolean });
-const emit = defineEmits(['close']);
+const emit = defineEmits(['close', 'registered']);
 
 const form = ref({
   name: '',
@@ -117,11 +120,50 @@ const onFileChange = (e) => {
   form.value.imageUrl = URL.createObjectURL(file);
 };
 
-const submitForm = () => {
-  console.log('폼 데이터', form.value);
-  alert('등록 완료!');
-  Object.keys(form.value).forEach(k => form.value[k] = k==='petOnly'?false:'');
-  emit('close');
+const isSubmitting = ref(false);
+
+const submitForm = async () => {
+  if (isSubmitting.value) return;
+  
+  try {
+    isSubmitting.value = true;
+    
+    // API에 전송할 데이터 준비 (DB 컬럼명에 맞게)
+    const payload = {
+      name: form.value.name,
+      morph: form.value.morph,
+      birthday: form.value.birthday,
+      price: Number(form.value.price),
+      mother: form.value.mother,
+      father: form.value.father,
+      etc: form.value.description,
+      sex: form.value.sex,
+      homeYn: form.value.petOnly ? 'Y' : 'N',
+      color: form.value.color,
+      imgPath: form.value.imageUrl || null,
+      salePrice: null  // 판매가격은 나중에 설정 가능
+    };
+    
+    const response = await CREATE_CRE(payload);
+    
+    alert('개체가 성공적으로 등록되었습니다!');
+    
+    // 폼 초기화
+    Object.keys(form.value).forEach(k => {
+      if (k === 'petOnly') form.value[k] = false;
+      else if (k === 'price') form.value[k] = '';
+      else form.value[k] = '';
+    });
+    
+    emit('registered', response.data);
+    emit('close');
+  } catch (error) {
+    console.error('개체 등록 실패:', error);
+    const errorMsg = error.response?.data?.message || '개체 등록에 실패했습니다.';
+    alert(errorMsg);
+  } finally {
+    isSubmitting.value = false;
+  }
 };
 </script>
 

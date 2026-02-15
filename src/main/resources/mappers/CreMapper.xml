@@ -9,7 +9,7 @@
     <select id="selectCreList" resultType="com.maple.info.vo.CreVo">
         SELECT idx, name, morph, birthday, price, mother, father, etc, sex, home_yn AS homeYn, color, sale_price AS salePrice, img_path AS imgPath
         FROM GECKO
-        WHERE HOME_YN = 'Y'
+      <!--  WHERE HOME_YN = 'Y'-->
     </select>
 
     <!-- Cre 단일 조회 -->

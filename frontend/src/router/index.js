@@ -39,6 +39,12 @@ const routes = [
     name: 'CreWrite',
     component: () => import('../views/cre/CreWrite.vue')
   },
+  // 개인화 설정 팝업 DxGrid용 
+  {
+    path: '/cre/test',
+    name: 'CreTest',
+    component: () => import('../views/cre/CreTest.vue')
+  },
   {
     path: '/login',
     name: 'Login',

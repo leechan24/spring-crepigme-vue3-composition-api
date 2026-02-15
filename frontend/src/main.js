@@ -1,3 +1,7 @@
+// 1. DevExtreme 스타일 임포트 (가장 먼저!)
+import 'devextreme/dist/css/dx.common.css';
+import 'devextreme/dist/css/dx.light.css';
+
 import './assets/common.css'
 
 import { createApp } from 'vue'

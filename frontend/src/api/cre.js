@@ -8,7 +8,7 @@ export const CRE_LIST = async () => {
 
 // 크레 생성 (POST)
 export const CREATE_CRE = async (cre) => {
-    return await axios.post('/api/cre/create', cre);
+    return await axios.post('/cre', cre);
 }
 
 // 크레 삭제 (DELETE)
