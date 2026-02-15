@@ -16,7 +16,7 @@ lombok 설치 완료
 C:\Users\chan\Documents\workspace-spring-tools-for-eclipse-4.31.0.RELEASE\minfo
 
 -- 깃 토큰 
-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
+
 
 -- 12c부터는 계정 생성할때 C##붙여야함  (dbeaver에서도 마찬가지)
 SQL> create user C##chan identified by 1234; 
